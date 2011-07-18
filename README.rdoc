@@ -7,11 +7,7 @@ specifically to help avoid problems with caching.
 
 * Rails 3.x (Not tested with Rails 3.1)
 * Jquery
-
-Furthermore the gem depends on the following other gems, which should be resolved automatically if
-you're using bundler:
-
-* babilu
+* gem 'babilu'
 
 == Installation
 
