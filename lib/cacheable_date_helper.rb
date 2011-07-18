@@ -1,5 +1,5 @@
 require "cacheable_date_helper/version"
 
 module CacheableDateHelper
-  # Your code goes here...
+  require 'cacheable_date_helper/railtie'
 end
