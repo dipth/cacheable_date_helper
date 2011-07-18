@@ -10,10 +10,10 @@ module CacheableDateHelper
   class InstallGenerator < Rails::Generators::Base
     desc "Copies the necessary js-files to public/javascripts/"
 
-    source_root File.expand_path('templates', __FILE__)
+    source_root File.expand_path('../', __FILE__)
 
     def copy_files
-      directory   'javascripts',      'public/javascripts'
+      directory   'templates/javascripts', 'public/javascripts'
     end
   end
 end
