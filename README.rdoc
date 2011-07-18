@@ -1,0 +1,62 @@
+= Cacheable Date Helper -- Making your caching-experience more fun!
+
+cacheable_date_helper aims to add some alternatives to some of the built-in date-helpers in rails,
+specifically to help avoid problems with caching.
+
+== Requirements
+
+* Rails 3.x (Not tested with Rails 3.1)
+* Jquery
+
+Furthermore the gem depends on the following other gems, which should be resolved automatically if
+you're using bundler:
+
+* babilu
+
+== Installation
+
+In your gemfile:
+
+    gem 'cacheable_date_helper'
+
+Then run the installation-generator, which will add two javascript-files to your public/javascripts folder
+
+    rails generate cacheable_date_helper:install
+
+Include the javascript-files in your layout:
+
+    <%= javascript_include_tag ['date','locales','cacheable_date_helper'] %>
+
+Note the extra 'locales' reference. This is a reference to the locales.js file that the babilu gem automatically
+generates.
+You can leave this reference out, if you're already using the babilu gem and have the locales.js referenced elsewhere.
+
+== Usage
+
+* time_ago_in_words
+
+Have you ever tried caching pages where this helper is used? It's no fun at all!
+
+Imagine you have a page, where you print out a list of comments, and on each comment you print out a time_ago_in_words string for when the comment was created.
+Then imagine that you page_cache this page indefinitely and sweep it when a comment is added, removed or edited.
+What happens then with the time_ago_in_word strings? - They only change when the page is sweeped!
+So you risk having a page where a comment is marked as created "less than a minute ago" even though it might be years since that comment was created.
+
+cacheable_date_helper to the rescue!
+
+What you can do instead, is use cacheable_date_helper's cacheable_time_ago_in_words method, which instead of outputting a time_ago_in_words-string simply outputs the date localized with the :short format.
+Furthermore the date is put in a span-tag with some HTML5-data attributes that stores the UTC-version of the date.
+Then when the page loads, an unobtrusive piece of javascript-code finds all these span-tags and replaces their content with a similar time_ago_in_words string based on their respective UTC-date and the local time on the clients computer.
+The javascript that generates the time_ago_in_words string is a direct port of the original rails-version, and even uses your rails locale-files to generate the strings (with help from the babilu gem).
+
+Example:
+
+    cacheable_time_ago_in_words(Time.zone.now - 2 minutes) # => <span class="time_ago_in_words" data-timestamp="Mon Jul 18 12:21:12 UTC 2011" data-include-seconds="false">18 Jul 14:21</span>
+    
+Which will be replaced by the client-side javascript with:
+
+    <span class="time_ago_in_words" data-timestamp="Mon Jul 18 12:22:11 UTC 2011" data-include-seconds="false">2 minutes ago</span>
+
+== License
+
+This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License
